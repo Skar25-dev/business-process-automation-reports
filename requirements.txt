@@ -1,0 +1,22 @@
+# Web Framework
+fastapi
+uvicorn[standard]
+
+# Base de datos
+sqlalchemy
+psycopg2-binary # o aiosqlite si usas SQLite
+psydantic
+psydantic-settings
+
+# Generación de Reportes
+pandas
+openpyxl
+reportlab
+
+# Automatización y Email
+apscheduler
+fastapi-mail
+
+# Utilidades
+python-dotenv
+jinja2
