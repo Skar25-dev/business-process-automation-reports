@@ -97,17 +97,14 @@ source venv/bin/activate  # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 Configurar Secretos:
+- Copia el archivo de ejemplo: **cp .env.example .env**
+- Edita el archivo .env con tus credenciales reales (DB, Email).
+- Poblar Base de Datos:
 ```
-Copia el archivo de ejemplo: cp .env.example .env
-Edita el archivo .env con tus credenciales reales (DB, Email).
-Poblar Base de Datos:
-
-```
-```
-Bash
 python seed_data.py
-Verificar Sistema:
-Bash
-python test_config.py
-Si todo es correcto, verás el mensaje: "Sistema configurado para: DESARROLLO (SQLite)"
 ```
+- Verificar Sistema:
+```
+python test_config.py
+```
+Si todo es correcto, verás el mensaje: **"Sistema configurado para: DESARROLLO (SQLite)"**
