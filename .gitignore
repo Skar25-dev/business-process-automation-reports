@@ -1,0 +1,15 @@
+# Entorno virtual
+venv/
+__pycache__/
+*.pyc
+
+# Secretos (¡MUY IMPORTANTE!)
+.env
+
+# Datos y Reportes locales
+data/*.db
+reports/*.xlsx
+reports/*.pdf
+
+# Configuraciones locales de IDE
+.vscode/

@@ -1,0 +1,37 @@
+from pydantic_settings import BaseSettings, SettingsConfigDict
+from pathlib import Path
+import json
+
+class Settings(BaseSettings):
+    POSTGRES_USER: str = "postgres"
+    POSTGRES_PASSWORD: str = ""
+    POSTGRES_HOST: str = "localhost"
+    POSTGRES_PORT: str = "5432"
+    POSTGRES_DB: str = "database"
+
+    MAIL_PASSWORD: str = ""
+
+    app_name: str = "BPA Reports System"
+    company_name: str = "Daniel Sánchez"
+    db_type: str = "sqlite" # este valor puede ser 'sqlite' o 'postgresql'
+    contact_email: str = "alusan9143@ieselcaminas.org"
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        extra="ignore"
+    )
+    
+def load_settings():
+    settings = Settings()
+
+    json_path = Path("config/settings.json")
+    if json_path.exists():
+        with open(json_path, "r") as f:
+            config_data = json.load(f)
+            for key, value in config_data.items():
+                if hasattr(settings, key):
+                    setattr(settings, key, value)
+    
+    return settings
+
+settings = load_settings()

@@ -1,0 +1,7 @@
+{
+    "app_name": "BPA Reports System",
+    "company_name": "Daniel Sánchez",
+    "db_type": "sqlite",
+    "report_schedule": "18:00",
+    "contact_email": "alusan9143@ieselcaminas.org"
+}

@@ -1,102 +1,113 @@
 # 📊 Business Process Automation Reports (BPAR)
 
-![Python](https://img.shields.io/badge/python-3.9+-blue.svg)
+![Python](https://img.shields.io/badge/python-3.12+-blue.svg)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-05998b.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-Sistema integral de automatización para la generación y distribución de reportes empresariales. Elimina la carga operativa manual, reduce errores humanos y garantiza la entrega puntual de información crítica.
+Sistema integral de automatización para la generación y distribución de reportes empresariales. Transforma datos crudos en informes profesionales (Excel/PDF) y los distribuye automáticamente, eliminando la carga operativa manual y reduciendo errores humanos.
+
+---
 
 ## 🚀 Descripción
 
-Este proyecto permite a empresas automatizar la generación de reportes diarios, eliminando tareas manuales repetitivas y reduciendo errores humanos.
-
-El sistema:
-- Consulta datos desde una base de datos
-- Genera reportes en Excel (o PDF)
-- Envía los reportes automáticamente por email
-- Permite generar reportes manualmente mediante una API
+BPAR es una solución diseñada para empresas que requieren reportes recurrentes. El sistema automatiza el ciclo de vida completo del dato:
+- **Extracción:** Consulta flexible a bases de datos relacionales.
+- **Procesamiento:** Limpieza y cálculo de métricas mediante el motor de Pandas.
+- **Generación:** Creación de archivos profesionales con formato avanzado.
+- **Distribución:** Envío automático por Email y gestión mediante una interfaz Web.
 
 ---
 
 ## 💡 Caso de Uso Real
-Ideal para departamentos de Finanzas, Ventas u Operaciones que actualmente dedican horas diarias a exportar datos de un ERP/CRM, darles formato en Excel y enviarlos por correo a los gerentes. **BPAR lo hace en segundos y sin intervención humana.**
-
-## 💡 Caso de uso real
-
-Muchas empresas generan reportes diariamente de forma manual:
-- Exportando datos
-- Creando Excel
-- Enviando emails
-
-Este sistema automatiza todo el proceso, permitiendo:
-- Ahorro de tiempo
-- Reducción de errores
-- Estandarización de informes
+Ideal para departamentos de Finanzas, Ventas u Operaciones que actualmente dedican horas diarias a exportar datos de un ERP/CRM, darles formato en Excel y enviarlos por correo. **BPAR automatiza este proceso en segundos**, garantizando estandarización y puntualidad.
 
 ---
 
-## ⚙️ Funcionalidades
+## ✨ Funcionalidades
 
-✅ Generación automática de reportes  
-✅ Envío de emails con adjuntos  
-✅ Programación diaria de tareas  
-✅ API para ejecución manual  
-✅ Almacenamiento de reportes históricos  
-✅ Configuración flexible mediante JSON  
+✅ **Generación Automática:** Reportes listos sin intervención manual.  
+✅ **Dashboard Web:** Interfaz visual para gestionar, disparar y descargar reportes.  
+✅ **Arquitectura Multi-DB:** Soporte nativo para **SQLite** (desarrollo) y **PostgreSQL** (producción).  
+✅ **Configuración Segura:** Gestión híbrida mediante archivos `.env` (secretos) y `settings.json` (ajustes de usuario).  
+✅ **Validación Robusta:** Uso de **Pydantic** para garantizar la integridad de las configuraciones.  
+✅ **Programación Inteligente:** Tareas programadas totalmente configurables.  
 
 ---
+
 ## 🏗️ Arquitectura del Sistema
 
-El sistema está diseñado siguiendo una arquitectura modular por capas, separando la lógica de obtención de datos, el procesamiento y la distribución.
+El sistema sigue un diseño modular por capas, permitiendo que la lógica de negocio sea independiente de la infraestructura de base de datos o la interfaz.
 
 ### 🔵 Flujo de Datos
 ```text
-[ Base de Datos ] 
-      │
-      ▼
-[ SQLAlchemy ORM ] ──► (Modelos de Datos)
-      │
-      ▼
-[ Service Layer ] ──► [ Pandas Processing ] ──► [ Excel/PDF Utils ]
-      │                                               │
-      │                                               ▼
-      ├───────► [ Scheduler ] ───┐             [ Archivos .xlsx ]
-      │         (Auto-ejecución) │                    │
-      ▼                          ▼                    │
-[ FastAPI ] ◄─────────── [ Email Service ] ◄──────────┘
-(Ejecución Manual)       (Envío con Adjunto)
+[ Usuario ] <───► [ Dashboard Web (Jinja2) ] <───► [ FastAPI API ]
+                                                        │
+      ┌─────────────────────────────────────────────────┤
+      ▼                                                 ▼
+[ Config Layer ] ◄── (.env / JSON)            [ Service Layer ]
+      │                                                 │
+      ▼                                         ┌───────┴───────┐
+[ Base de Datos ] ◄── (SQLAlchemy)              ▼               ▼
+(SQLite / Postgres)                     [ Pandas Engine ] ──► [ Excel/PDF ]
 ```
 ### 🛠️ Componentes Principales
-- Capa de Datos (DAL): Utiliza SQLAlchemy para la interacción con la base de datos. Los modelos definen la estructura de ventas y productos.
-- Capa de Procesamiento (Utils): Módulos especializados que transforman datos crudos en archivos finales. Usa Pandas para el análisis y Openpyxl para el formato profesional de Excel.
-- Capa de Servicios (Services):
-- Report Service: Orquestador que extrae datos y genera los archivos.
-- Email Service: Gestiona la conexión SMTP y el envío de correos con adjuntos.
-- Scheduler Service: Utiliza APScheduler para ejecutar tareas automáticas en segundo plano (Cron jobs).
-- Capa de Interfaz (API): Desarrollada con FastAPI, permite disparar reportes manualmente y monitorear el sistema.
+- Configuración (Pydantic): Valida y centraliza todos los parámetros del sistema.
+- Acceso a Datos (DAL): Abstracción de base de datos mediante SQLAlchemy ORM.
+- Procesamiento (Utils): Transformación de datos y diseño de archivos con Pandas y Openpyxl.
+- Servicios: Gestión de lógica de envío (Email), históricos y agenda (APScheduler).
 
-### 🛠️ Tecnologías Utilizadas
-- Lenguaje: Python 3.12+
-- Framework API: FastAPI
-- Análisis de Datos: Pandas
-- ORM: SQLAlchemy
-- Generación de Archivos: Openpyxl (Excel) & ReportLab (PDF)
-- Automatización: APScheduler
-- Emails: FastAPI-Mail (SMTP)
+### 🛠️-  Tecnologías Utilizadas
+- Backend: Python 3.12+, FastAPI, SQLAlchemy.
+- Análisis de Datos: Pandas, Openpyxl.
+- Validación: Pydantic Settings.
+- Frontend: Jinja2, Bootstrap (Próximamente).
+- Seguridad: Python-dotenv.
 
 ### 📂 Estructura del Proyecto
 ```
 ├── app/
-│   ├── main.py            # Punto de entrada de la API y Scheduler
-│   ├── database.py        # Configuración de SQLAlchemy
-│   ├── models.py          # Modelos de la base de datos
-│   ├── services/          # Lógica de negocio (Email, Reportes, Agenda)
-│   └── utils/             # Generadores de archivos (Excel, PDF)
-├── config/                # Ajustes y credenciales (JSON)
-├── data/                  # Base de datos local (SQLite)
-├── reports/               # Histórico de archivos generados
-├── seed_data.py           # Script para generar datos ficticios iniciales
-├── check_data_pandas.py   # Script de verificación y análisis de datos
+│   ├── main.py            # Entrada de la API y Scheduler
+│   ├── config.py          # Cerebro de configuración y validación (Día 2)
+│   ├── database.py        # Conector flexible SQLite/Postgres
+│   ├── models.py          # Modelos de datos (SQLAlchemy)
+│   ├── services/          # Lógica (Email, Reportes, Scheduler)
+│   ├── utils/             # Generadores (Excel, PDF)
+│   ├── templates/         # Vistas HTML para el Dashboard
+│   └── static/            # Estilos CSS y activos visuales
+├── config/                # Ajustes de usuario (settings.json)
+├── data/                  # Almacenamiento local de base de datos
+├── reports/               # Histórico de reportes generados
+├── .env                   # Secretos y passwords (Excluido de Git)
+├── .env.example           # Plantilla de secretos para nuevos entornos
+├── .gitignore             # Filtro de archivos sensibles
+├── seed_data.py           # Generador de datos iniciales (Día 1)
+├── test_config.py         # Script de verificación de sistema (Día 2)
 ├── requirements.txt
 └── README.md
+```
+### ⚙️ Instalación y Configuración
+Clonar y preparar entorno:
+
+```
+Bash
+git clone https://github.com/tu-usuario/bpa-reports.git
+cd bpa-reports
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+```
+Configurar Secretos:
+```
+Copia el archivo de ejemplo: cp .env.example .env
+Edita el archivo .env con tus credenciales reales (DB, Email).
+Poblar Base de Datos:
+
+```
+```
+Bash
+python seed_data.py
+Verificar Sistema:
+Bash
+python test_config.py
+Si todo es correcto, verás el mensaje: "Sistema configurado para: DESARROLLO (SQLite)"
 ```
