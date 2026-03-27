@@ -16,6 +16,12 @@ class Settings(BaseSettings):
     db_type: str = "sqlite" # este valor puede ser 'sqlite' o 'postgresql'
     contact_email: str = "alusan9143@ieselcaminas.org"
 
+    report_settings: dict = {
+        "default_days": 30,
+        "included_columns": ["product_name", "category", "amount", "date"],
+        "sheet_name": "Reporte de Ventas"
+    }
+
     model_config = SettingsConfigDict(
         env_file=".env",
         extra="ignore"

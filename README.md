@@ -30,7 +30,10 @@ Ideal para departamentos de Finanzas, Ventas u Operaciones que actualmente dedic
 ✅ **Arquitectura Multi-DB:** Soporte nativo para **SQLite** (desarrollo) y **PostgreSQL** (producción).  
 ✅ **Configuración Segura:** Gestión híbrida mediante archivos `.env` (secretos) y `settings.json` (ajustes de usuario).  
 ✅ **Validación Robusta:** Uso de **Pydantic** para garantizar la integridad de las configuraciones.  
-✅ **Programación Inteligente:** Tareas programadas totalmente configurables.  
+✅ **Programación Inteligente:** Tareas programadas totalmente configurables.
+✅ **Reportes Configurables:** Filtros dinámicos por categoría, fecha y tipo de reporte.
+✅ **Diseño Automático de Excel:** Ajuste de columnas y nombres de hoja dinámicos.
+✅ **Selección de Columnas:** Control total desde el JSON sobre qué datos mostrar en el reporte.
 
 ---
 
@@ -106,5 +109,9 @@ python seed_data.py
 - Verificar Sistema:
 ```
 python test_config.py
+```
+**Generar Reporte de Prueba:**
+```
+python test_report.py
 ```
 Si todo es correcto, verás el mensaje: **"Sistema configurado para: DESARROLLO (SQLite)"**

@@ -3,5 +3,10 @@
     "company_name": "Daniel Sánchez",
     "db_type": "sqlite",
     "report_schedule": "18:00",
-    "contact_email": "alusan9143@ieselcaminas.org"
+    "contact_email": "alusan9143@ieselcaminas.org",
+    "report_settings": {
+        "default_days": 30,
+        "included_columns": ["product_name", "category", "amount", "date"],
+        "sheet_name": "Pruebas Ventas"
+    }
 }
