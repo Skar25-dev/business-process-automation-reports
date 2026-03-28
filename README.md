@@ -4,114 +4,101 @@
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-05998b.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-Sistema integral de automatización para la generación y distribución de reportes empresariales. Transforma datos crudos en informes profesionales (Excel/PDF) y los distribuye automáticamente, eliminando la carga operativa manual y reduciendo errores humanos.
+Sistema integral de automatización para la generación y distribución de reportes empresariales. Transforma datos crudos en informes profesionales (Excel/PDF) y los distribuye automáticamente por email.
 
 ---
 
 ## 🚀 Descripción
 
-BPAR es una solución diseñada para empresas que requieren reportes recurrentes. El sistema automatiza el ciclo de vida completo del dato:
-- **Extracción:** Consulta flexible a bases de datos relacionales.
-- **Procesamiento:** Limpieza y cálculo de métricas mediante el motor de Pandas.
-- **Generación:** Creación de archivos profesionales con formato avanzado.
-- **Distribución:** Envío automático por Email y gestión mediante una interfaz Web.
-
----
-
-## 💡 Caso de Uso Real
-Ideal para departamentos de Finanzas, Ventas u Operaciones que actualmente dedican horas diarias a exportar datos de un ERP/CRM, darles formato en Excel y enviarlos por correo. **BPAR automatiza este proceso en segundos**, garantizando estandarización y puntualidad.
+BPAR es una solución diseñada para eliminar tareas repetitivas en departamentos de administración y finanzas. El sistema automatiza el ciclo de vida completo del dato:
+- **Extracción:** Consulta dinámica a bases de datos (SQLite/PostgreSQL).
+- **Procesamiento:** Limpieza y cálculo de métricas mediante **Pandas**.
+- **Generación:** Creación de archivos profesionales con **Openpyxl**.
+- **Distribución:** Envío automático por **Email (SMTP)** con archivos adjuntos.
 
 ---
 
 ## ✨ Funcionalidades
 
-✅ **Generación Automática:** Reportes listos sin intervención manual.  
-✅ **Dashboard Web:** Interfaz visual para gestionar, disparar y descargar reportes.  
-✅ **Arquitectura Multi-DB:** Soporte nativo para **SQLite** (desarrollo) y **PostgreSQL** (producción).  
-✅ **Configuración Segura:** Gestión híbrida mediante archivos `.env` (secretos) y `settings.json` (ajustes de usuario).  
-✅ **Validación Robusta:** Uso de **Pydantic** para garantizar la integridad de las configuraciones.  
-✅ **Programación Inteligente:** Tareas programadas totalmente configurables.
-✅ **Reportes Configurables:** Filtros dinámicos por categoría, fecha y tipo de reporte.
-✅ **Diseño Automático de Excel:** Ajuste de columnas y nombres de hoja dinámicos.
-✅ **Selección de Columnas:** Control total desde el JSON sobre qué datos mostrar en el reporte.
+✅ **Generación Automática:** Reportes profesionales listos sin intervención humana.  
+✅ **Envío por Email:** Distribución automática a destinatarios configurables.  
+✅ **Dashboard Web:** Interfaz visual para gestionar y descargar reportes (En desarrollo).  
+✅ **Arquitectura Multi-DB:** Compatible con **SQLite** y **PostgreSQL**.  
+✅ **Configuración Segura:** Uso de archivos `.env` para credenciales y `settings.json` para ajustes.  
+✅ **Suite de Pruebas:** Pruebas modulares organizadas para validar cada capa del sistema.  
 
 ---
 
 ## 🏗️ Arquitectura del Sistema
 
-El sistema sigue un diseño modular por capas, permitiendo que la lógica de negocio sea independiente de la infraestructura de base de datos o la interfaz.
-
-### 🔵 Flujo de Datos
-```text
-[ Usuario ] <───► [ Dashboard Web (Jinja2) ] <───► [ FastAPI API ]
-                                                        │
-      ┌─────────────────────────────────────────────────┤
-      ▼                                                 ▼
-[ Config Layer ] ◄── (.env / JSON)            [ Service Layer ]
-      │                                                 │
-      ▼                                         ┌───────┴───────┐
-[ Base de Datos ] ◄── (SQLAlchemy)              ▼               ▼
-(SQLite / Postgres)                     [ Pandas Engine ] ──► [ Excel/PDF ]
+### 🔵 Flujo de Trabajo
+```
+[ DB ] ──► [ Pandas Engine ] ──► [ Excel Generator ] ──► [ Email Service ] ──► [ Destinatario ]
 ```
 ### 🛠️ Componentes Principales
-- Configuración (Pydantic): Valida y centraliza todos los parámetros del sistema.
-- Acceso a Datos (DAL): Abstracción de base de datos mediante SQLAlchemy ORM.
-- Procesamiento (Utils): Transformación de datos y diseño de archivos con Pandas y Openpyxl.
-- Servicios: Gestión de lógica de envío (Email), históricos y agenda (APScheduler).
-
-### 🛠️-  Tecnologías Utilizadas
-- Backend: Python 3.12+, FastAPI, SQLAlchemy.
-- Análisis de Datos: Pandas, Openpyxl.
-- Validación: Pydantic Settings.
-- Frontend: Jinja2, Bootstrap (Próximamente).
-- Seguridad: Python-dotenv.
+- **Capa de Configuración:** Gestión de secretos con `python-dotenv` y validación con `Pydantic`.
+- **Capa de Servicios:**
+  - **ReportService:** Orquesta la extracción y procesamiento.
+  - **EmailService:** Gestiona la conexión SMTP y el envío de adjuntos.
+- **Suite de Pruebas:** Localizada en `/tests`, permite verificar el sistema de forma aislada o integral.
 
 ### 📂 Estructura del Proyecto
 ```
 ├── app/
 │   ├── main.py            # Entrada de la API y Scheduler
-│   ├── config.py          # Cerebro de configuración y validación (Día 2)
+│   ├── config.py          # Cerebro de configuración y validación
 │   ├── database.py        # Conector flexible SQLite/Postgres
 │   ├── models.py          # Modelos de datos (SQLAlchemy)
-│   ├── services/          # Lógica (Email, Reportes, Scheduler)
-│   ├── utils/             # Generadores (Excel, PDF)
-│   ├── templates/         # Vistas HTML para el Dashboard
-│   └── static/            # Estilos CSS y activos visuales
+│   ├── services/          
+│   │   ├── report_service.py # Lógica de reportes y filtros
+│   │   └── email_service.py  # Lógica de envío de correos (Día 4)
+│   └── utils/             
+│       └── excel_generator.py # Motor de diseño de Excel
 ├── config/                # Ajustes de usuario (settings.json)
-├── data/                  # Almacenamiento local de base de datos
-├── reports/               # Histórico de reportes generados
+├── data/                  # Almacenamiento de base de datos local
+├── reports/               # Histórico de archivos generados
+├── tests/                 # 📂 Suite de Pruebas (Organizado Día 4)
+│   ├── check_data_pandas.py
+│   ├── test_config.py
+│   ├── test_report.py
+│   └── test_full_flow.py  # Prueba del flujo completo: DB -> Excel -> Email
 ├── .env                   # Secretos y passwords (Excluido de Git)
 ├── .env.example           # Plantilla de secretos para nuevos entornos
-├── .gitignore             # Filtro de archivos sensibles
-├── seed_data.py           # Generador de datos iniciales (Día 1)
-├── test_config.py         # Script de verificación de sistema (Día 2)
+├── .gitignore             # Filtro de seguridad para Git
+├── seed_data.py           # Generador de datos iniciales
 ├── requirements.txt
 └── README.md
 ```
+### 🛠️ Tecnologías Utilizadas
+- **Backend:** Python 3.12+, FastAPI, SQLAlchemy.
+- **Datos**: Pandas, Openpyxl.
+- **Email**: FastAPI-Mail (aiosmtplib).
+- **Validación**: Pydantic Settings & Dotenv.
+
 ### ⚙️ Instalación y Configuración
-Clonar y preparar entorno:
+
+**1. Preparar entorno:**
+```
+Bash
+python -m venv venv
+source venv/bin/activate  # En Windows: venv\Scripts\activate
+pip install -r requirements.txt
+```
+**2. Configurar Secretos:**
+
+- Copia .env.example a .env.
+
+- Rellena MAIL_USERNAME y MAIL_PASSWORD (Usa una Contraseña de Aplicación si usas Gmail).
+
+**3. Poblar Base de Datos:**
 
 ```
 Bash
-git clone https://github.com/tu-usuario/bpa-reports.git
-cd bpa-reports
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-pip install -r requirements.txt
-```
-Configurar Secretos:
-- Copia el archivo de ejemplo: **cp .env.example .env**
-- Edita el archivo .env con tus credenciales reales (DB, Email).
-- Poblar Base de Datos:
-```
 python seed_data.py
 ```
-- Verificar Sistema:
-```
-python test_config.py
-```
-**Generar Reporte de Prueba:**
-```
-python test_report.py
-```
-Si todo es correcto, verás el mensaje: **"Sistema configurado para: DESARROLLO (SQLite)"**
+
+**4. Ejecutar Pruebas (Desde la raíz):**
+
+- Verificar configuración: ` python -m tests.test_config `
+- Generar Excel: ` python -m tests.test_report `
+- **Flujo Completo (Envío de Email):** `python -m tests.test_full_flow`

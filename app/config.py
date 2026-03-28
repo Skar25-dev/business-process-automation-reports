@@ -26,6 +26,14 @@ class Settings(BaseSettings):
         env_file=".env",
         extra="ignore"
     )
+
+    mail_username: str = ""
+    mail_password: str = ""
+    mail_from: str = ""
+    mail_port: int = 587
+    mail_server: str = ""
+    mail_starttls: bool = True
+    mail_ssl_tls: bool = False
     
 def load_settings():
     settings = Settings()
