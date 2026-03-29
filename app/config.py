@@ -16,6 +16,16 @@ class Settings(BaseSettings):
     db_type: str = "sqlite" # este valor puede ser 'sqlite' o 'postgresql'
     contact_email: str = "alusan9143@ieselcaminas.org"
 
+    mail_username: str = ""
+    mail_password: str = ""
+    mail_from: str = ""
+    mail_port: int = 587
+    mail_server: str = ""
+    mail_starttls: bool = True
+    mail_ssl_tls: bool = False
+
+    report_schedule: str = "8:00"
+
     report_settings: dict = {
         "default_days": 30,
         "included_columns": ["product_name", "category", "amount", "date"],
@@ -26,14 +36,6 @@ class Settings(BaseSettings):
         env_file=".env",
         extra="ignore"
     )
-
-    mail_username: str = ""
-    mail_password: str = ""
-    mail_from: str = ""
-    mail_port: int = 587
-    mail_server: str = ""
-    mail_starttls: bool = True
-    mail_ssl_tls: bool = False
     
 def load_settings():
     settings = Settings()
