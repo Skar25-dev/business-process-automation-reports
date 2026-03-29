@@ -20,20 +20,24 @@ BPAR es una solución diseñada para eliminar tareas repetitivas en departamento
 
 ## ✨ Funcionalidades
 
-✅ **Generación Automática:** Reportes profesionales listos sin intervención humana.  
-✅ **Envío por Email:** Distribución automática a destinatarios configurables.  
-✅ **Dashboard Web:** Interfaz visual para gestionar y descargar reportes (En desarrollo).  
-✅ **Arquitectura Multi-DB:** Compatible con **SQLite** y **PostgreSQL**.  
-✅ **Configuración Segura:** Uso de archivos `.env` para credenciales y `settings.json` para ajustes.  
-✅ **Suite de Pruebas:** Pruebas modulares organizadas para validar cada capa del sistema.  
+✅ **Automatización 24/7:** Robot programador (Scheduler) para envíos diarios sin intervención humana.  
+✅ **Reportes Inteligentes:** Generación de archivos Excel con formatos, filtros y cálculos automáticos.  
+✅ **Distribución Segura:** Envío de correos electrónicos con adjuntos mediante protocolos asíncronos.  
+✅ **Arquitectura Multi-DB:** Soporte nativo para **SQLite** (desarrollo) y **PostgreSQL** (producción).  
+✅ **Configuración Híbrida:** Gestión de secretos (`.env`) y ajustes de usuario (`settings.json`).  
+✅ **Sistema de Logs:** Monitoreo detallado de la actividad del robot y estado de las tareas.  
 
 ---
 
 ## 🏗️ Arquitectura del Sistema
 
+El sistema utiliza una arquitectura orientada a servicios (SOA) con un motor de tareas en segundo plano.
+
 ### 🔵 Flujo de Trabajo
 ```
-[ DB ] ──► [ Pandas Engine ] ──► [ Excel Generator ] ──► [ Email Service ] ──► [ Destinatario ]
+[ Reloj Interno ] ──► [ Scheduler ] ──► [ ReportService ] ──► [ Pandas Engine ]
+                                               │                  │
+[ Destinatario ] <─── [ EmailService ] <───────┘          [ Archivo Excel ]
 ```
 ### 🛠️ Componentes Principales
 - **Capa de Configuración:** Gestión de secretos con `python-dotenv` y validación con `Pydantic`.
@@ -45,35 +49,37 @@ BPAR es una solución diseñada para eliminar tareas repetitivas en departamento
 ### 📂 Estructura del Proyecto
 ```
 ├── app/
-│   ├── main.py            # Entrada de la API y Scheduler
+│   ├── main.py            # Entrada de la API y arranque del Scheduler (Día 5)
 │   ├── config.py          # Cerebro de configuración y validación
 │   ├── database.py        # Conector flexible SQLite/Postgres
 │   ├── models.py          # Modelos de datos (SQLAlchemy)
-│   ├── services/          
-│   │   ├── report_service.py # Lógica de reportes y filtros
-│   │   └── email_service.py  # Lógica de envío de correos (Día 4)
+│   ├── services/          # 🧠 Lógica de Negocio
+│   │   ├── report_service.py    # Procesamiento y filtros
+│   │   ├── email_service.py     # Envío de correos (SMTP)
+│   │   └── scheduler_service.py # ⏱️ Programador de tareas (Día 5)
 │   └── utils/             
-│       └── excel_generator.py # Motor de diseño de Excel
+│       └── excel_generator.py   # Motor de diseño de Excel
 ├── config/                # Ajustes de usuario (settings.json)
 ├── data/                  # Almacenamiento de base de datos local
-├── reports/               # Histórico de archivos generados
-├── tests/                 # 📂 Suite de Pruebas (Organizado Día 4)
-│   ├── check_data_pandas.py
-│   ├── test_config.py
-│   ├── test_report.py
-│   └── test_full_flow.py  # Prueba del flujo completo: DB -> Excel -> Email
+├── reports/               # Histórico de archivos generados (.xlsx)
+├── tests/                 # 📂 Suite de Pruebas y Verificación
+│   ├── test_config.py     # Valida .env y configuración
+│   ├── test_report.py     # Valida generación de Excel
+│   ├── test_full_flow.py  # Valida flujo integral (Manual)
+│   └── test_scheduler.py  # Valida autonomía del robot (Día 5)
 ├── .env                   # Secretos y passwords (Excluido de Git)
 ├── .env.example           # Plantilla de secretos para nuevos entornos
 ├── .gitignore             # Filtro de seguridad para Git
-├── seed_data.py           # Generador de datos iniciales
+├── seed_data.py           # Generador de datos iniciales (Faker)
 ├── requirements.txt
 └── README.md
 ```
 ### 🛠️ Tecnologías Utilizadas
 - **Backend:** Python 3.12+, FastAPI, SQLAlchemy.
-- **Datos**: Pandas, Openpyxl.
-- **Email**: FastAPI-Mail (aiosmtplib).
-- **Validación**: Pydantic Settings & Dotenv.
+- **Datos:** Pandas, Openpyxl.
+- **Email:** FastAPI-Mail (aiosmtplib).
+- **Validación:** Pydantic Settings & Dotenv.
+- **Automatización:** APScheduler.
 
 ### ⚙️ Instalación y Configuración
 
@@ -102,3 +108,10 @@ python seed_data.py
 - Verificar configuración: ` python -m tests.test_config `
 - Generar Excel: ` python -m tests.test_report `
 - **Flujo Completo (Envío de Email):** `python -m tests.test_full_flow`
+- **Probar el Robot (Scheduler):** `python -m test.test_scheduler` (ejecución cada minuto).
+
+**5. Iniciar Servidor Producción:**
+```
+Bash
+uvicorn app.main:app --reload
+```
