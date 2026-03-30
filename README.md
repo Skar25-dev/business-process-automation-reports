@@ -20,12 +20,12 @@ BPAR es una solución diseñada para eliminar tareas repetitivas en departamento
 
 ## ✨ Funcionalidades
 
-✅ **Automatización 24/7:** Robot programador (Scheduler) para envíos diarios sin intervención humana.  
-✅ **Reportes Inteligentes:** Generación de archivos Excel con formatos, filtros y cálculos automáticos.  
-✅ **Distribución Segura:** Envío de correos electrónicos con adjuntos mediante protocolos asíncronos.  
-✅ **Arquitectura Multi-DB:** Soporte nativo para **SQLite** (desarrollo) y **PostgreSQL** (producción).  
-✅ **Configuración Híbrida:** Gestión de secretos (`.env`) y ajustes de usuario (`settings.json`).  
-✅ **Sistema de Logs:** Monitoreo detallado de la actividad del robot y estado de las tareas.  
+✅ **Dashboard Web:** Interfaz visual moderna (Bootstrap 5) para el control del sistema.
+✅ **Ejecución Manual:** Botón para disparar reportes al instante sin esperar al Scheduler.
+✅ **Historial de Reportes:** Listado automático y visor de archivos generados.
+✅ **Descarga Directa:** Acceso inmediato a los archivos Excel desde el navegador.
+✅ **Automatización 24/7:** Robot programador (Scheduler) para envíos diarios.
+✅ **Arquitectura Robusta:** Uso de rutas absolutas y tareas en segundo plano (Background Tasks).
 
 ---
 
@@ -35,16 +35,18 @@ El sistema utiliza una arquitectura orientada a servicios (SOA) con un motor de 
 
 ### 🔵 Flujo de Trabajo
 ```
-[ Reloj Interno ] ──► [ Scheduler ] ──► [ ReportService ] ──► [ Pandas Engine ]
-                                               │                  │
-[ Destinatario ] <─── [ EmailService ] <───────┘          [ Archivo Excel ]
+[ Usuario ] <───► [ Dashboard HTML/CSS ] <───► [ FastAPI ]
+                                                   │
+      ┌────────────────────────────────────────────┤
+      ▼                                            ▼
+[ Background Task ]                          [ File System ]
+      │                                            │
+      └─► [ ReportService ] ──► [ Excel ] ──► [ reports/ ]
 ```
 ### 🛠️ Componentes Principales
-- **Capa de Configuración:** Gestión de secretos con `python-dotenv` y validación con `Pydantic`.
-- **Capa de Servicios:**
-  - **ReportService:** Orquesta la extracción y procesamiento.
-  - **EmailService:** Gestiona la conexión SMTP y el envío de adjuntos.
-- **Suite de Pruebas:** Localizada en `/tests`, permite verificar el sistema de forma aislada o integral.
+- **Interfaz (Frontend):** Plantillas dinámicas con Jinja2 y estilos modulares en **CSS3**.
+- **Backend (FastAPI):** Gestión de rutas estáticas, descarga de archivos y procesamiento asíncrono.
+- **Persistencia:** Almacenamiento físico de reportes con nombres fechados para auditoria.
 
 ### 📂 Estructura del Proyecto
 ```
@@ -84,8 +86,7 @@ El sistema utiliza una arquitectura orientada a servicios (SOA) con un motor de 
 ### ⚙️ Instalación y Configuración
 
 **1. Preparar entorno:**
-```
-Bash
+```Bash
 python -m venv venv
 source venv/bin/activate  # En Windows: venv\Scripts\activate
 pip install -r requirements.txt
@@ -98,8 +99,7 @@ pip install -r requirements.txt
 
 **3. Poblar Base de Datos:**
 
-```
-Bash
+```Bash
 python seed_data.py
 ```
 
@@ -111,7 +111,6 @@ python seed_data.py
 - **Probar el Robot (Scheduler):** `python -m test.test_scheduler` (ejecución cada minuto).
 
 **5. Iniciar Servidor Producción:**
-```
-Bash
-uvicorn app.main:app --reload
+```Bash
+uvicorn app.main:app --reload --reload-include "*.json" --reload-include "*.html" --reload-include "*.css" --port 8000
 ```
