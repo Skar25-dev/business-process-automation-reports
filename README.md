@@ -20,12 +20,12 @@ BPAR es una solución diseñada para eliminar tareas repetitivas en departamento
 
 ## ✨ Funcionalidades
 
-✅ **Dashboard Web:** Interfaz visual moderna (Bootstrap 5) para el control del sistema.
-✅ **Ejecución Manual:** Botón para disparar reportes al instante sin esperar al Scheduler.
-✅ **Historial de Reportes:** Listado automático y visor de archivos generados.
-✅ **Descarga Directa:** Acceso inmediato a los archivos Excel desde el navegador.
-✅ **Automatización 24/7:** Robot programador (Scheduler) para envíos diarios.
-✅ **Arquitectura Robusta:** Uso de rutas absolutas y tareas en segundo plano (Background Tasks).
+- ✅ **Dashboard Web:** Interfaz visual moderna (Bootstrap 5) para el control del sistema.
+- ✅ **Ejecución Manual:** Botón para disparar reportes al instante sin esperar al Scheduler.
+- ✅ **Historial de Reportes:** Listado automático y visor de archivos generados.
+- ✅ **Descarga Directa:** Acceso inmediato a los archivos Excel desde el navegador.
+- ✅ **Automatización 24/7:** Robot programador (Scheduler) para envíos diarios.
+- ✅ **Arquitectura Robusta:** Uso de rutas absolutas y tareas en segundo plano (Background Tasks).
 
 ---
 
