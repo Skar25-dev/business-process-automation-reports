@@ -42,3 +42,7 @@ def start_scheduler():
     scheduler.start()
     logger.info(f"Scheduler iniciado: Reporte programado todos los días a las {settings.report_schedule}")
     return scheduler
+
+def reload_scheduler(new_hour: str):
+    from apscheduler.schedulers.asyncio import AsyncIOScheduler
+    hour, minute = new_hour.split(":")

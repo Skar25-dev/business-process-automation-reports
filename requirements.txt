@@ -1,22 +1,42 @@
-# Web Framework
-fastapi
-uvicorn[standard]
-
-# Base de datos
-sqlalchemy
-psycopg2-binary # o aiosqlite si usas SQLite
-psydantic
-psydantic-settings
-
-# Generación de Reportes
-pandas
-openpyxl
-reportlab
-
-# Automatización y Email
-apscheduler
-fastapi-mail
-
-# Utilidades
-python-dotenv
-jinja2
+aiosmtplib==5.1.0
+annotated-doc==0.0.4
+annotated-types==0.7.0
+anyio==4.13.0
+APScheduler==3.11.2
+blinker==1.9.0
+cffi==2.0.0
+click==8.3.1
+cryptography==46.0.6
+dnspython==2.8.0
+email-validator==2.3.0
+et_xmlfile==2.0.0
+Faker==40.11.1
+faker-commerce==1.0.4
+fastapi==0.135.2
+fastapi-mail==1.6.2
+greenlet==3.3.2
+h11==0.16.0
+idna==3.11
+Jinja2==3.1.6
+MarkupSafe==3.0.3
+numpy==2.4.3
+openpyxl==3.1.5
+pandas==3.0.1
+psycopg2-binary==2.9.11
+pycparser==3.0
+pydantic==2.12.5
+pydantic-settings==2.13.1
+pydantic_core==2.41.5
+python-dateutil==2.9.0.post0
+python-dotenv==1.2.2
+python-multipart==0.0.22
+regex==2025.11.3
+schedule==1.2.2
+six==1.17.0
+SQLAlchemy==2.0.48
+starlette==0.52.1
+typing-inspection==0.4.2
+typing_extensions==4.15.0
+tzlocal==5.3.1
+uvicorn==0.42.0
+watchfiles==1.1.1

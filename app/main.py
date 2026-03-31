@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from fastapi import FastAPI, Request, BackgroundTasks, HTTPException
+from fastapi import FastAPI, Request, BackgroundTasks, HTTPException, Form
 from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -9,6 +9,9 @@ from app.services.report_service import ReportService
 from app.services.email_service import EmailService
 from app.services.scheduler_service import start_scheduler
 from contextlib import asynccontextmanager
+import json
+from app.config import settings, load_settings
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 REPORTS_DIR = BASE_DIR / "reports"
@@ -84,3 +87,42 @@ async def run_report_manual(background_tasks: BackgroundTasks):
     
     background_tasks.add_task(task)
     return {"status": "Proceso de reporte iniciado en segundo plano"}
+
+@app.get("/settings", response_class=HTMLResponse)
+async def settings_page(request: Request):
+    return templates.TemplateResponse("settings.html", {
+        "request": request,
+        "settings": settings,
+        "app_name": settings.app_name
+    })
+
+@app.post("/settings")
+async def update_settings(
+    app_name: str = Form(...),
+    company_name: str = Form(...),
+    contact_email: str = Form(...),
+    report_schedule: str = Form(...),
+    db_type: str = Form(...)
+):
+    # Crear el nuevo diccionario para el JSON
+    new_config = {
+        "app_name": app_name,
+        "company_name": company_name,
+        "contact_email": contact_email,
+        "report_schedule": report_schedule,
+        "db_type": db_type,
+        "report_settings": settings.report_settings # Mantenemos los internos
+    }
+
+    # Guardar físicamente
+    with open("config/settings.json", "w") as f:
+        json.dump(new_config, f, indent=4)
+
+    # Respuesta con alerta y redirección
+    html_content = """
+    <script>
+        alert('✅ ¡Configuración guardada! El sistema se está reiniciando para aplicar los cambios.');
+        window.location.href = '/settings';
+    </script>
+    """
+    return HTMLResponse(content=html_content)
