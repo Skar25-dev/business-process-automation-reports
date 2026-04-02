@@ -1,42 +1,92 @@
+:root {
+    --deep-navy: #141b41;
+    --corporate-blue: #306bac;
+    --bright-blue: #6f9ceb;
+    --soft-blue: #98b9f2;
+    --tech-violet: #918ef4;
+
+    --main-gradient: linear-gradient(135deg, var(--corporate-blue) 33%, var(--deep-navy) 100%);
+    --tech-gradient: linear-gradient(135deg, var(--corporate-blue) 0%, var(--tech-violet) 100%);
+
+    --success-color: #198754;
+    --succes-color-hover: #125a38;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107;
+
+    --bg-body: #f0f2f5;
+    --text-main: #1a1f36;
+    --white: #ffffff;
+}
+
 body {
-    background-color: #f4f7f6;
+    background-color: var(--bg-body);
+    color: var(--text-main);
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    color: #333;
+    -webkit-font-smoothing: antialiased;
 }
 
 .navbar {
-    border-bottom: 3px solid #0d6efd;
+    background-color: var(--deep-navy) !important;
     margin-bottom: 0;
+    border-bottom: 4px solid;
+    border-image-source: var(--main-gradient);
+    border-image-slice: 1;
 }
 
 .navbar-brand {
     font-weight: 700;
     letter-spacing: 1px;
+    color: var(--white) !important;
 }
 
 .hero-section {
-    background: linear-gradient(135deg, #0d6efd 0%, #003d99 100%);
-    color: white;
-    padding: 2.5rem 0;
+    background: var(--main-gradient);
+    color: var(--white);
+    padding: 3rem 0;
     margin-bottom: 2rem;
+    box-shadow: inset 0 -10px 20px rgba(0, 0, 0, 0.1);
 }
 
 .card {
     border: none;
     border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    box-shadow: 0 10px 25px rgba(20, 27, 65, 0.05);
 }
 
 .card-header {
-    border-top-left-radius: 15px !important;
-    border-top-right-radius: 15px !important;
+    background-color: var(--white);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 1.2rem !important;
     font-weight: 600;
+    color: var(--tech-violet) !important;
+    letter-spacing: 1px;
+}
+
+.alert-tech {
+    background-color: rgba(145, 142, 244, 0.05);
+    border: none;
+    border-left: 5px solid var(--tech-violet);
+    color: var(--deep-navy);
+    border-radius: 10px;
+    padding: 1.2rem;
+    font-weight: 500;
+}
+
+.alert-tech span {
+    color: var(--tech-violet);
+    margin-right: 10px;
 }
 
 .form-label {
+    color: var(--deep-navy);
     font-weight: 600;
-    color: #495057;
-    margin-top: 10px;
+    transition: color 0.3s ease;
+}
+
+.mb-3:focus-within .form-label, 
+.col-md-4:focus-within .form-label, 
+.col-md-6:focus-within .form-label {
+    color: var(--tech-violet);
 }
 
 .form-control, .form-select {
@@ -45,21 +95,70 @@ body {
     border: 1px solid #ced4da;
 }
 
-.form-control:focus {
-    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.15);
+.form-control:focus, .form-select:focus {
+    border-color: var(--soft-blue);
+    box-shadow: 0 0 0 0.25rem rgba(152, 185, 242, 0.25);
 }
 
-.btn-primary, .btn-success {
-    border-radius: 10px;
-    padding: 0.8rem;
-    font-weight: 600;
+.form-text {
+    color: var(--bright-blue);
+}
+
+hr {
+    border-top: 1px solid var(--soft-blue);
+    opacity: 0.3;
+}
+
+h5.text-secondary {
+    color: var(--tech-violet) !important;
+    font-weight: 700;
+}
+
+.btn-primary {
+    background-color: var(--corporate-blue) !important;
     border: none;
+    border-radius: 10px;
+    transition: all 0.3s ease;
 }
 
-.btn-success {
-    background-color: #198754;
+.btn-primary:hover {
+    background-color: var(--bright-blue) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(48, 107, 172, 0.3);
 }
 
-.btn-success:hover {
-    background-color: #157347;
+.btn-save-tech {
+    background-color: var(--corporate-blue);
+    color: var(--white) !important;
+    border: none;
+    border-radius: 12px;
+    padding: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 10px rgba(48, 107, 172, 0.2);
+}
+
+.btn-save-tech:hover {
+    background-color: var(--tech-violet);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(145, 142, 244, 0.4);
+}
+
+.btn-save-tech:active {
+    transform: translateY(0);
+}
+
+.badge.bg-primary {
+    background-color: var(--tech-violet) !important;
+}
+
+.tech-title {
+    background: var(--tech-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent; 
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
 }

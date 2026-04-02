@@ -2,79 +2,96 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width initial-scale=1.0">
-    <title>{{ app_name }}</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ app_name }} - Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}?v=1.2">
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+    <!-- Navbar unificada -->
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
         <div class="container">
-            <a class="navbar-brand" href="/">📊 BPAR SYSTEM</a>
-            <div class="navbar-nav">
-                <a class="nav-link active" href="/">Dashboard</a>
-                <a class="nav-link" href="/settings">Configuración</a>
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <span class="me-2">📊</span> BPAR SYSTEM
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link active" href="/"><i class="bi bi-speedometer2"></i> Dashboard</a>
+                <a class="nav-link" href="/settings"><i class="bi bi-gear"></i> Configuración</a>
             </div>
         </div>
     </nav>
-    <header class="hero-section shadow">
+
+    <!-- Sección Hero: El motor visual del proyecto -->
+    <header class="hero-section shadow-sm">
         <div class="container text-center">
-            <h1>📊 {{ app_name }}</h1>
-            <p class="lead opacity-75">Automatización de Reportes Empresariales en tiempo real</p>
+            <h1 class="display-5 fw-bold mb-2">{{ app_name }}</h1>
+            <p class="lead opacity-75 fw-light">Automatización inteligente de reportes empresariales</p>
         </div>
     </header>
 
     <main class="container">
-        <div class="row">
+        <div class="row g-4">
 
-            <!-- Columna izquierda: Acciones -->
-            <div class="col-md-4 mb-4">
-                <div class="card shadow-sm h-100">
-                    <div class="card-header bg-dark text-white p-3">
-                        🚀 Ejecución Manual
+            <!-- Columna Izquierda: Panel de Control -->
+            <div class="col-md-4">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-header border-0 bg-transparent pt-4 px-4">
+                        <i class="bi bi-rocket-takeoff text-primary me-2"></i> Ejecución Manual
                     </div>
-                    <div class="card-body d-flex flex-column justify-content-center text-center p-4">
-                        <p class="text-muted">¿Necesitas el reporte ahora mismo? Haz clic para generarlo y enviarlo por email.</p>
-                        <button onclick="runReport()" id="btnRun" class="btn btn-primary btn-lg w-100 mb-3 shadow-sm">
-                            Generar y Enviar Reporte
-                        </button>
-                        <div id="statusMsg" class="small"></div>
+                    <div class="card-body p-4 text-center d-flex flex-column justify-content-between">
+                        <p class="text-muted small">Genera y envía el reporte configurado por defecto a la bandeja de entrada de forma inmediata.</p>
+                        
+                        <div>
+                            <button onclick="runReport()" id="btnRun" class="btn btn-primary btn-lg w-100 py-3 shadow-sm transition-all">
+                                <i class="bi bi-send-fill me-2"></i> Enviar Reporte Ahora
+                            </button>
+                            <!-- Espacio para mensajes de estado -->
+                            <div id="statusMsg" class="mt-3" style="min-height: 25px;"></div>
+                        </div>
                     </div>
                 </div>
             </div>
             
-            <!-- Columna derecha: Historial -->
+            <!-- Columna Derecha: Historial de Actividad -->
             <div class="col-md-8">
-                <div class="card shadow-sm h-100">
-                    <div class="card-header bg-white p-3 d-flex justify-content-between align-items-center">
-                        <span class="text-secondary">📂 HISTORIAL DE REPORTES</span>
-                        <span class="badge bg-primary rounded-pill">{{ reports|length }} archivos</span>
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="card-header border-0 bg-transparent pt-4 px-4 d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-folder2-open text-primary me-2"></i> Historial de Reportes</span>
+                        <span class="badge bg-primary rounded-pill px-3 py-2">{{ reports|length }} archivos</span>
                     </div>
                     <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-hover align-middle">
-                                <thead class="table-light">
+                        <div class="table-responsive" style="max-height: 450px; overflow-y: auto;">
+                            <table class="table table-hover align-middle mb-0">
+                                <thead class="table-light sticky-top">
                                     <tr>
-                                        <th class="ps-4">Nombre del Reporte</th>
-                                        <th class="text-end pe-4">Acción</th>
+                                        <th class="ps-4 py-3">Nombre del Archivo</th>
+                                        <th class="text-end pe-4 py-3">Acciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for report in reports %}
                                     <tr>
-                                        <td class="ps-4 report-name">{{ report }}</td>
+                                        <td class="ps-4">
+                                            <div class="d-flex align-items-center">
+                                                <i class="bi bi-file-earmark-excel text-success fs-4 me-3"></i>
+                                                <span class="report-name fw-medium text-dark">{{ report }}</span>
+                                            </div>
+                                        </td>
                                         <td class="text-end pe-4">
-                                            <a href="/download/{{ report }}" class="btn btn-sm btn-outline-success">
-                                                📥 Descargar
+                                            <a href="/download/{{ report }}" class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm">
+                                                <i class="bi bi-download me-1"></i> Bajar
                                             </a>
                                         </td>
                                     </tr>
                                     {% else %}
                                     <tr>
-                                        <td colspan="2" class="text-center py-5 text-muted italic">
-                                            No se han encontrado reportes en la carpeta /reports.
+                                        <td colspan="2" class="text-center py-5">
+                                            <div class="py-4">
+                                                <i class="bi bi-cloud-slash display-4 text-light"></i>
+                                                <p class="text-muted mt-3 italic">No hay reportes disponibles en la carpeta /reports</p>
+                                            </div>
                                         </td>
                                     </tr>
                                     {% endfor %}
@@ -86,37 +103,50 @@
             </div>
         </div>
     </main>
-    <!-- Script para el botón manual -->
+
+    <!-- Footer Simple -->
+    <footer class="container text-center mt-5 mb-4 py-4 border-top">
+        <p class="text-muted small">&copy; 2024 {{ settings.company_name }} | Automatización BPAR</p>
+    </footer>
+
+    <!-- Lógica de Interfaz -->
     <script>
        async function runReport() {
-            const btn = document.getElementById('btnRun')
-            const msg = document.getElementById('statusMsg')
+            const btn = document.getElementById('btnRun');
+            const msg = document.getElementById('statusMsg');
 
-            // Bloqueamos el botón para evitar un doble clic
-            btn.disabled = true
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Procesando...'
-            msg.className = "small text-primary"
-            msg.innerText = "⏳ El servidor está procesando el Excel..."
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Procesando...';
+            msg.innerHTML = '<span class="text-primary small animate-pulse">⏳ Iniciando motor de reporte...</span>';
 
             try {
-                const response = await fetch('/run-report', {method: 'POST'})
+                const response = await fetch('/run-report', { method: 'POST' });
                 if (response.ok) {
-                    msg.className = "small text-success"
-                    msg.innerHTML = "✅ <strong>¡Éxito!</strong> El reporte se está enviando a tu email."
+                    msg.innerHTML = '<span class="text-success small fw-bold">✅ ¡Enviado! Revisa tu bandeja de entrada.</span>';
+                    setTimeout(() => { location.reload(); }, 3000);
                 } else {
-                    msg.className = "small text-danger"
-                    msg.innerText = "❌ Error en el servidor."
+                    msg.innerHTML = '<span class="text-danger small">❌ Error en el proceso del servidor.</span>';
                 }
             } catch (error) {
-            msg.className = "small text-danger"
-            msg.innerText = "❌ Error de conexión."
+                msg.innerHTML = '<span class="text-danger small">❌ Error de conexión con la API.</span>';
             }
-            // Reactivar botón después de 5 segundos
+
             setTimeout(() => {
                 btn.disabled = false;
-                btn.innerText = "Generar y Enviar Reporte";
+                btn.innerHTML = '<i class="bi bi-send-fill me-2"></i> Enviar Reporte Ahora';
             }, 5000);
        }
     </script>
+
+    <style>
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: .5; }
+        }
+        .transition-all { transition: all 0.3s ease; }
+    </style>
 </body>
 </html>

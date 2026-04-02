@@ -50,7 +50,8 @@ async def dashboard(request: Request):
     return templates.TemplateResponse("index.html", {
         "request": request, 
         "reports": report_files,
-        "app_name": settings.app_name # Usamos el nombre configurado
+        "app_name": settings.app_name,
+        "settings": settings
     })
 
 @app.get("/download/{filename}")

@@ -11,8 +11,7 @@
         "included_columns": [
             "product_name",
             "category",
-            "amount",
-            "date"
+            "amount"
         ]
     }
 }
