@@ -47,6 +47,26 @@ body {
     box-shadow: inset 0 -10px 20px rgba(0, 0, 0, 0.1);
 }
 
+.hero-section .container {
+    max-width: 100%;
+    padding-left: 3rem;
+    padding-right: 3rem;
+}
+
+.table-responsive {
+    padding: 0 1rem;
+}
+
+@media (max-width: 768px) {
+    .container-fluid {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    .hero-section {
+        padding: 2rem 0;
+    }
+}
+
 .card {
     border: none;
     border-radius: 15px;

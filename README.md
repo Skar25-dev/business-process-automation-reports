@@ -41,8 +41,9 @@ Control total de los parámetros del sistema (Email, Horarios, Columnas).
 ![Settings](docs/screenshots/settings.png)
 
 ### 📧 Entrega de Reportes
-Ejemplo del reporte final recibido automáticamente en la bandeja de entrada.
+Ejemplo del reporte recibido por email y vista del archivo Excel generado.
 ![Email](docs/screenshots/email_received.png)
+![Excel](docs/screenshots/excel_preview.png)
 
 ---
 
