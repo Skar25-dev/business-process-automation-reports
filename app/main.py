@@ -7,7 +7,7 @@ from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from app.database import SessionLocal
-from app.services.report_service import ReportService
+from app.services.report_service import REPORT_MODELS
 from app.services.email_service import EmailService
 from app.services.scheduler_service import start_scheduler
 from app.config import settings
@@ -72,11 +72,13 @@ async def download_report(filename: str):
 
 @app.get("/settings", response_class=HTMLResponse)
 async def settings_page(request: Request):
-    """Muestra el formulario de ajustes actuales"""
+    report_types = list(REPORT_MODELS.keys())
+
     return templates.TemplateResponse("settings.html", {
         "request": request,
         "settings": settings,
-        "app_name": settings.app_name
+        "app_name": settings.app_name,
+        "report_types": report_types
     })
 
 @app.post("/settings")

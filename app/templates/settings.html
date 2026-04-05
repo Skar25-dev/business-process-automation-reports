@@ -60,7 +60,11 @@
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label">Tipo de Reporte por Defecto</label>
                                     <select name="default_report_type" class="form-select">
-                                        <option value="ventas" {% if settings.default_report_type == 'ventas' %}selected{% endif %}>Ventas</option>
+                                        {% for type in report_types %}
+                                            <option value="{{ type }}" {% if settings.default_report_type == type %}selected{% endif %}>
+                                                {{ type.capitalize() }}
+                                            </option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                             </div>

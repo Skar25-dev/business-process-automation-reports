@@ -4,7 +4,7 @@
     "contact_email": "sanchezdaneri.tnf@gmail.com",
     "report_schedule": "12:10",
     "db_type": "sqlite",
-    "default_report_type": "ventas",
+    "default_report_type": "inventario",
     "report_settings": {
         "default_days": 30,
         "sheet_name": "Pruebas Daniel",

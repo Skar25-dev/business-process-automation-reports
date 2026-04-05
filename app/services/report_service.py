@@ -1,13 +1,13 @@
 import pandas as pd
 from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
-from app.models import Sale
+from app.models import Sale, Inventory
 from app.utils.excel_generator import generate_excel_report
 from app.config import settings
 
 REPORT_MODELS = {
     "ventas": Sale,
-    # "inventario": Inventory
+    "inventario": Inventory
 }
 
 class ReportService:
