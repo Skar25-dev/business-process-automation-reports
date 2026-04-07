@@ -2,15 +2,17 @@ import pandas as pd
 from datetime import datetime
 from pathlib import Path
 
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+REPORTS_DIR = BASE_DIR / "reports"
+
 def generate_excel_report(df: pd.DataFrame, report_name: str, sheet_name: str = "Reporte") -> str:
-    output_dir = Path("reports")
-    output_dir.mkdir(exist_ok=True)
+    REPORTS_DIR.mkdir(exist_ok=True)
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M")
     filename = f"{report_name}_{timestamp}.xlsx"
-    filepath = output_dir/filename
+    filepath = REPORTS_DIR / filename
 
-    with pd.ExcelWriter(filepath, engine="openpyxl") as writer:
+    with pd.ExcelWriter(filepath, engine='openpyxl') as writer:
         df.to_excel(writer, index=False, sheet_name=sheet_name)
 
         workbook = writer.book

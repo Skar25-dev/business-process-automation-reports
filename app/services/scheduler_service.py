@@ -13,7 +13,7 @@ async def scheduled_report_job():
     db = SessionLocal()
     try:
         report_service = ReportService(db)
-        path = report_service.get_report(report_type="ventas")
+        path = report_service.get_report(report_type=settings.default_report_type)
 
         if path:
             email_service = EmailService()

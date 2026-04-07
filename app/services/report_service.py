@@ -10,6 +10,14 @@ REPORT_MODELS = {
     "inventario": Inventory
 }
 
+def get_columns_for_model(report_type: str):
+    model = REPORT_MODELS.get(report_type)
+    
+    if not model:
+        return []
+    
+    return [column.key for column in model.__table__.columns if column.key != "id"]
+
 class ReportService:
     def __init__(self, db: Session):
         self.db = db
@@ -28,6 +36,14 @@ class ReportService:
         if category and category != "Todas":
             query = query.filter(model.category == category)
         
+        if days:
+            date_limit = datetime.now() - timedelta(days=days)
+
+            if hasattr(model, 'date'):
+                query = query.filter(model.date >= date_limit)
+            elif hasattr(model, 'last_restock_date'):
+                query = query.filter(model.last_restock_date >= date_limit)
+
         df = pd.read_sql(query.statement, self.db.bind)
         
         if df.empty: return None

@@ -67,6 +67,18 @@
                                         {% endfor %}
                                     </select>
                                 </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Columnas a incluir en el reporte</label>
+                                    <!-- Guardamos los datos aquí de forma segura para JS -->
+                                    <div id="checkbox-container" 
+                                         class="p-3 border rounded bg-light shadow-sm"
+                                         data-all-columns='{{ all_columns | tojson | safe }}'
+                                         data-selected='{{ settings.report_settings.included_columns | tojson | safe }}'>
+                                         <!-- Se llena con JS -->
+                                    </div>
+                                    <div class="form-text mt-2">Selecciona al menos una columna para que el reporte no esté vacío.</div>
+                                </div>
                             </div>
 
                             <hr class="my-4">
@@ -87,11 +99,37 @@
                                 </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label class="form-label">Columnas a incluir (separadas por coma)</label>
-                                <input type="text" name="included_columns" class="form-control" value="{{ settings.report_settings.included_columns | join(', ') }}" required>
-                                <div class="form-text">Define qué campos de la base de datos quieres ver en el reporte.</div>
-                            </div>
+                            <!-- Pasamos los datos de python a JS -->
+                            <script>
+                                function updateCheckboxes() {
+                                    const container = document.getElementById('checkbox-container');
+                                    
+                                    const allColumns = JSON.parse(container.dataset.allColumns);
+                                    const currentlySelected = JSON.parse(container.dataset.selected);
+                                    
+                                    const reportType = document.querySelector('select[name="default_report_type"]').value;
+                                    const columns = allColumns[reportType] || [];
+                                    
+                                    container.innerHTML = ''; 
+                            
+                                    columns.forEach(col => {
+                                        const isChecked = currentlySelected.includes(col) ? 'checked' : '';
+                                        
+                                        container.innerHTML += `
+                                            <div class="form-check form-check-inline me-3 mb-2">
+                                                <input class="form-check-input" type="checkbox" name="included_columns" 
+                                                       value="${col}" id="col_${col}" ${isChecked}>
+                                                <label class="form-check-label text-capitalize" for="col_${col}">
+                                                    ${col.replace('_', ' ')}
+                                                </label>
+                                            </div>
+                                        `;
+                                    });
+                                }
+                            
+                                document.querySelector('select[name="default_report_type"]').addEventListener('change', updateCheckboxes);
+                                document.addEventListener('DOMContentLoaded', updateCheckboxes);
+                            </script>
 
                             <div class="alert-tech mt-4 mb-3 shadow-sm">
                                 <span>💡</span> Al guardar, el servidor se reiniciará automáticamente para aplicar la nueva configuración y reprogramar el robot.

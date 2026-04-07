@@ -1,7 +1,7 @@
 {
     "app_name": "BPA Reports System",
     "company_name": "Daniel S\u00e1nchez",
-    "contact_email": "sanchezdaneri.tnf@gmail.com",
+    "contact_email": "sanchezdaneri.tf@gmail.com",
     "report_schedule": "12:10",
     "db_type": "sqlite",
     "default_report_type": "inventario",
@@ -11,7 +11,8 @@
         "included_columns": [
             "product_name",
             "category",
-            "amount"
+            "stock_quantity",
+            "unit_cost"
         ]
     }
 }

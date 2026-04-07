@@ -26,6 +26,8 @@ class Settings(BaseSettings):
 
     report_schedule: str = "8:00"
 
+    default_report_type: str = "ventas"
+
     report_settings: dict = {
         "default_days": 30,
         "included_columns": ["product_name", "category", "amount", "date"],
