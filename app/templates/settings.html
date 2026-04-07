@@ -82,7 +82,7 @@
                             </div>
 
                             <hr class="my-4">
-                            <h5 class="text-secondary mb-3">📊 Configuración del Archivo Excel</h5>
+                            <h5 class="text-secondary mb-3">📊 Configuración del Archivo</h5>
 
                             <div class="row">
                                 <div class="col-md-4 mb-3">
@@ -94,26 +94,41 @@
                                     <input type="number" name="default_days" class="form-control" value="{{ settings.report_settings.default_days }}" required>
                                 </div>
                                 <div class="col-md-4 mb-3">
-                                    <label class="form-label">Nombre Hoja</label>
-                                    <input type="text" name="sheet_name" class="form-control" value="{{ settings.report_settings.sheet_name }}" required>
-                                </div>
-                                <div class="col-md-4 mb-3">
                                     <label class="form-label">Formato del Archivo</label>
-                                    <select name="report_format" class="form-select">
+                                    <select name="report_format" id="report_format" class="form-select">
                                         <option value="xlsx" {% if settings.report_format == 'xlsx' %}selected{% endif %}>Excel (.xlsx)</option>
                                         <option value="pdf" {% if settings.report_format == 'pdf' %}selected{% endif %}>PDF (.pdf)</option>
                                     </select>
+                                </div>
+
+                                <div class="col-md-4 mb-3" id="sheet_name_container">
+                                    <label class="form-label">Nombre Hoja</label>
+                                    <input type="text" name="sheet_name" class="form-control" value="{{ settings.report_settings.sheet_name }}">
                                 </div>
                             </div>
 
                             <!-- Pasamos los datos de python a JS -->
                             <script>
+                                function toggleSheetName() {
+                                    const formatSelector = document.getElementById('report_format');
+                                    const sheetContainer = document.getElementById('sheet_name_container');
+                                    const sheetInput = sheetContainer.querySelector('input');
+                            
+                                    if (formatSelector.value === 'pdf') {
+                                        sheetContainer.classList.add('d-none');
+                                        sheetInput.required = false;
+                                    } else {
+                                        sheetContainer.classList.remove('d-none');
+                                        sheetInput.required = true;
+                                    }
+                                }
+                            
                                 function updateCheckboxes() {
                                     const container = document.getElementById('checkbox-container');
-                                    
-                                    const allColumns = JSON.parse(container.dataset.allColumns);
-                                    const currentlySelected = JSON.parse(container.dataset.selected);
-                                    
+                                    if (!container) return;
+                            
+                                    const allColumns = JSON.parse(container.dataset.allColumns || '{}');
+                                    const currentlySelected = JSON.parse(container.dataset.selected || '[]');
                                     const reportType = document.querySelector('select[name="default_report_type"]').value;
                                     const columns = allColumns[reportType] || [];
                                     
@@ -121,7 +136,6 @@
                             
                                     columns.forEach(col => {
                                         const isChecked = currentlySelected.includes(col) ? 'checked' : '';
-                                        
                                         container.innerHTML += `
                                             <div class="form-check form-check-inline me-3 mb-2">
                                                 <input class="form-check-input" type="checkbox" name="included_columns" 
@@ -134,8 +148,12 @@
                                     });
                                 }
                             
+                                document.getElementById('report_format').addEventListener('change', toggleSheetName);
                                 document.querySelector('select[name="default_report_type"]').addEventListener('change', updateCheckboxes);
-                                document.addEventListener('DOMContentLoaded', updateCheckboxes);
+                                document.addEventListener('DOMContentLoaded', () => {
+                                    toggleSheetName();
+                                    updateCheckboxes();
+                                });
                             </script>
 
                             <div class="alert-tech mt-4 mb-3 shadow-sm">

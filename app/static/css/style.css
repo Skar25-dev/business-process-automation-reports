@@ -10,12 +10,17 @@
 
     --success-color: #198754;
     --succes-color-hover: #125a38;
-    --danger-color: #dc3545;
+    --danger-color: #ff0019;
     --warning-color: #ffc107;
 
     --bg-body: #f0f2f5;
     --text-main: #1a1f36;
     --white: #ffffff;
+
+    --grey: #ced4da;
+
+    --excel-green: #198754;
+    --pdf-red: #dc3545;
 }
 
 body {
@@ -112,7 +117,7 @@ body {
 .form-control, .form-select {
     border-radius: 10px;
     padding: 0.7rem;
-    border: 1px solid #ced4da;
+    border: 1px solid var(--grey);
 }
 
 .form-control:focus, .form-select:focus {
@@ -202,7 +207,7 @@ h5.text-secondary {
 }
 
 .toast-tech-error {
-    background: linear-gradient(135deg, #dc3545 0%, var(--deep-navy) 100%) !important;
+    background: linear-gradient(135deg, var(--danger-color) 0%, var(--deep-navy) 100%) !important;
     color: var(--white) !important;
 }
 
@@ -218,4 +223,38 @@ h5.text-secondary {
 
 .toast.showing {
     animation: toast-slide-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.file-icon {
+    font-size: 1.6rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.file-icon-excel {
+    color: var(--excel-green);
+    filter: drop-shadow(0 2px 4px rgba(25, 135, 84, 0.2));
+}
+
+.file-icon-pdf { 
+    color: var(--pdf-red);
+    filter: drop-shadow(0 2px 4px rgba(220, 53, 69, 0.2));
+}
+
+tr:hover .file-icon {
+    transform: scale(1.2) rotate(5deg);
+}
+
+.report-name {
+    transition: color 0.2s ease;
+}
+
+tr:hover .report-name {
+    color: var(--corporate-blue) !important;
+}
+
+#sheet_name_container {
+    transition: all 0.3s ease;
 }
