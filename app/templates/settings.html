@@ -97,6 +97,13 @@
                                     <label class="form-label">Nombre Hoja</label>
                                     <input type="text" name="sheet_name" class="form-control" value="{{ settings.report_settings.sheet_name }}" required>
                                 </div>
+                                <div class="col-md-4 mb-3">
+                                    <label class="form-label">Formato del Archivo</label>
+                                    <select name="report_format" class="form-select">
+                                        <option value="xlsx" {% if settings.report_format == 'xlsx' %}selected{% endif %}>Excel (.xlsx)</option>
+                                        <option value="pdf" {% if settings.report_format == 'pdf' %}selected{% endif %}>PDF (.pdf)</option>
+                                    </select>
+                                </div>
                             </div>
 
                             <!-- Pasamos los datos de python a JS -->

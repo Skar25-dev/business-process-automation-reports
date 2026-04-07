@@ -39,11 +39,11 @@ templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
 @app.get("/", response_class=HTMLResponse)
 async def dashboard(request: Request):
-    """Muestra el historial de reportes ordenados por fecha de creación"""
+    """Muestra el historial de reportes (Excel y PDF) ordenados por fecha"""
     if not REPORTS_DIR.exists():
         REPORTS_DIR.mkdir(exist_ok=True)
         
-    files = [f for f in os.listdir(REPORTS_DIR) if f.endswith('.xlsx')]
+    files = [f for f in os.listdir(REPORTS_DIR) if f.endswith(('.xlsx', '.pdf'))]
     
     files_with_time = []
     for f in files:
@@ -93,6 +93,7 @@ async def update_settings(
     report_schedule: str = Form(...),
     db_type: str = Form(...),
     default_report_type: str = Form(...),
+    report_format: str = Form(...),
     default_days: int = Form(...),
     sheet_name: str = Form(...),
     included_columns: List[str] = Form(...)
@@ -104,6 +105,7 @@ async def update_settings(
         "report_schedule": report_schedule,
         "db_type": db_type,
         "default_report_type": default_report_type,
+        "report_format": report_format,
         "report_settings": {
             "default_days": default_days,
             "sheet_name": sheet_name,

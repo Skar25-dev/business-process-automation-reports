@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from datetime import datetime, timedelta
 from app.models import Sale, Inventory
 from app.utils.excel_generator import generate_excel_report
+from app.utils.pdf_generator import generate_pdf_report
 from app.config import settings
 
 REPORT_MODELS = {
@@ -48,12 +49,22 @@ class ReportService:
         
         if df.empty: return None
 
-        columns_to_include = settings.report_settings.get("included_columns")
-        if columns_to_include:
-            df = df[[col for col in columns_to_include if col in df.columns]]
+        requested_columns = settings.report_settings.get("included_columns", [])
+        valid_columns = [col for col in requested_columns if col in df.columns]
 
-        if 'date' in df.columns:
-            df['date'] = pd.to_datetime(df['date']).dt.strftime('%Y-%m-%d %H:%M')
+        if valid_columns:
+            df = df[valid_columns]
 
-        sheet = settings.report_settings.get("sheet_name", "Reporte")
-        return generate_excel_report(df, f"Reporte_{report_type}", sheet_name=sheet)
+        for col in df.columns:
+            if 'date' in col.lower():
+                df[col] = pd.to_datetime(df[col]).dt.strftime('%Y-%m-%d %H:%M')
+        
+        report_name = f"Reporte_{report_type}"
+
+        formato = getattr(settings, "report_format", "xlsx").lower()
+
+        if formato == "pdf":
+            return generate_pdf_report(df, report_name)
+        else:
+            sheet = settings.report_settings.get("sheet_name", "Reporte")
+            return generate_excel_report(df, f"Reporte_{report_type}", sheet_name=sheet)

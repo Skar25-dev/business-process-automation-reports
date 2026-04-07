@@ -25,8 +25,8 @@ class Settings(BaseSettings):
     mail_ssl_tls: bool = False
 
     report_schedule: str = "8:00"
-
     default_report_type: str = "ventas"
+    report_format: str = "xlsx"
 
     report_settings: dict = {
         "default_days": 30,
