@@ -141,13 +141,17 @@
 
             try {
                 const response = await fetch('/run-report', { method: 'POST' });
+                const data = await response.json
+
                 if (response.ok) {
                     toastEl.className = "toast align-items-center border-0 shadow-lg toast-tech-success";
-                    toastMsg.innerHTML = '<i class="bi bi-check-all me-2"></i> ¡Hecho! El reporte ya está en tu bandeja de entrada.';
+                    toastMsg.innerHTML = '<i class="bi bi-check-all me-2"></i> ¡Petición procesada! El servidor ha aceptado el envío del reporte.';
                     toast.show();
                     setTimeout(() => { location.reload(); }, 2000);
                 } else {
-                    throw new Error();
+                    toastEl.className = "toast align-items-center border-0 shadow-lg toast-tech-error"
+                    toastMsg.innerHTML = `<i class="bi bi-exclamattion-triangle-fill me-2></i> ${data.detail}`
+                    toast.show()
                 }
             } catch (error) {
                 toastEl.className = "toast align-items-center border-0 shadow-lg toast-tech-error";
