@@ -17,19 +17,11 @@ BPAR es una solución integral diseñada para eliminar la carga operativa manual
 - **Distribución Automatizada:** Envío seguro por **Email (SMTP)** con gestión de adjuntos.
 - **Gestión Web:** Interfaz para configurar columnas, horarios, formatos y tipos de reporte sin tocar código.
 
----
+## 📺 Demo en Vivo
 
-## ✨ Funcionalidades
+Muestra del flujo completo: generación manual, notificación en tiempo real, recepción de email y personalización del sistema.
 
-✅ **Soporte Multiformato:** Elige entre Excel para análisis profundo o PDF para presentaciones ejecutivas.  
-✅ **Dashboard Operativo:** Historial ordenado cronológicamente con iconos visuales diferenciados (Verde/Excel, Rojo/PDF).  
-✅ **Configuración Reactiva:** Selección de columnas mediante checkboxes que se actualizan dinámicamente según la tabla elegida.  
-✅ **Lógica Condicional de UI:** Interfaz inteligente que oculta campos irrelevantes (ej. oculta "Nombre de hoja" si seleccionas formato PDF).  
-✅ **Notificaciones Real-time:** Sistema de mensajes Flash (Toasts) con feedback inmediato tras confirmar el envío del email.  
-✅ **Automatización 24/7:** Robot programador (Scheduler) integrado para ejecuciones programadas desatendidas.  
-✅ **Arquitectura Multi-DB:** Conector flexible compatible con **SQLite** (desarrollo) y **PostgreSQL** (producción).
-
----
+![BPAR Demo](docs/demo/bpar_demo.mp4)
 
 ## 📸 Capturas de Pantalla
 
@@ -48,6 +40,18 @@ Ejemplo de recepción de reporte mediante protocolo SMTP, garantizando la distri
 ### 📊 Resultado Profesional
 Vista del reporte PDF generado automáticamente con diseño corporativo y optimización de lectura.
 ![PDF Preview](docs/screenshots/pdf_preview.png)
+
+---
+
+## ✨ Funcionalidades
+
+✅ **Soporte Multiformato:** Elige entre Excel para análisis profundo o PDF para presentaciones ejecutivas.  
+✅ **Dashboard Operativo:** Historial ordenado cronológicamente con iconos visuales diferenciados (Verde/Excel, Rojo/PDF).  
+✅ **Configuración Reactiva:** Selección de columnas mediante checkboxes que se actualizan dinámicamente según la tabla elegida.  
+✅ **Lógica Condicional de UI:** Interfaz inteligente que oculta campos irrelevantes (ej. oculta "Nombre de hoja" si seleccionas formato PDF).  
+✅ **Notificaciones Real-time:** Sistema de mensajes Flash (Toasts) con feedback inmediato tras confirmar el envío del email.  
+✅ **Automatización 24/7:** Robot programador (Scheduler) integrado para ejecuciones programadas desatendidas.  
+✅ **Arquitectura Multi-DB:** Conector flexible compatible con **SQLite** (desarrollo) y **PostgreSQL** (producción).
 
 ---
 

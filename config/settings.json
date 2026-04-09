@@ -1,14 +1,14 @@
 {
     "app_name": "BPA Reports System",
     "company_name": "Daniel S\u00e1nchez",
-    "contact_email": "sanchezdaneri.tf@gmail.com",
-    "report_schedule": "12:10",
+    "contact_email": "sanchezdaneri.tnf@gmail.com",
+    "report_schedule": "11:41",
     "db_type": "sqlite",
     "default_report_type": "inventario",
     "report_format": "pdf",
     "report_settings": {
         "default_days": 30,
-        "sheet_name": "Pruebas Daniel",
+        "sheet_name": "Reporte Ventas",
         "included_columns": [
             "product_name",
             "category",
