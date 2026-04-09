@@ -21,7 +21,9 @@ BPAR es una solución integral diseñada para eliminar la carga operativa manual
 
 Muestra del flujo completo: generación manual, notificación en tiempo real, recepción de email y personalización del sistema.
 
-![BPAR Demo](docs/demo/bpar_demo.mp4)
+https://github.com/user-attachments/assets/abb82dbc-a2d8-4289-8a8e-7af0fe1a4ef1
+
+
 
 ## 📸 Capturas de Pantalla
 
