@@ -47,7 +47,9 @@ def load_settings():
         with open(json_path, "r") as f:
             config_data = json.load(f)
             for key, value in config_data.items():
-                if hasattr(settings, key):
+                # Las variables de entorno / .env tienen prioridad sobre el JSON
+                # (necesario para que Docker pueda forzar, p. ej., DB_TYPE=postgresql).
+                if hasattr(settings, key) and key not in settings.model_fields_set:
                     setattr(settings, key, value)
     
     return settings
