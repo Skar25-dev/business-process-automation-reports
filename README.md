@@ -97,16 +97,20 @@ El sistema utiliza una arquitectura desacoplada donde el núcleo de datos es ind
 │           └── style.css        # Identidad visual (Deep Navy & Tech Violet)
 ├── config/
 │   └── settings.json      # Ajustes de usuario persistentes (JSON)
-├── data/
-│   └── business_data.db   # Base de datos local (SQLite)
+├── data/                  # Base de datos local SQLite (se crea sola, no se versiona)
 ├── reports/               # Almacenamiento cronológico de reportes generados
-├── tests/                 # 📂 Suite de Pruebas Automatizadas
+├── tests/                 # 📂 Suite de tests automatizados (pytest)
+├── scripts/manual_checks/ # Scripts de comprobación manual (envían email, bucle del scheduler...)
 ├── docs/                  # 📸 Capturas de pantalla y documentación
+├── .github/workflows/     # CI: tests + build de la imagen Docker
+├── Dockerfile             # Imagen de la aplicación
+├── docker-compose.yml     # App + PostgreSQL
 ├── .env.example           # Plantilla de secretos para nuevos entornos
 ├── .gitignore             # Filtro de seguridad para Git
-├── seed_data.py           # Script para poblar la DB con datos coherentes
+├── seed_data.py           # Script para poblar la DB con datos de demo (¡borra los datos existentes!)
 ├── run.sh                 # Script de arranque rápido con autorecarga
-├── requirements.txt       # Listado de dependencias del sistema
+├── requirements.txt       # Dependencias de producción
+├── requirements-dev.txt   # Dependencias de desarrollo (pytest, httpx)
 └── README.md              # Documentación técnica del proyecto
 
 ```
@@ -144,6 +148,28 @@ python seed_data.py
 
 - **Dashboard:** `http://localhost:8000`
 - **Ajustes:** `http://localhost:8000/settings` 
+
+### 🐳 Con Docker (app + PostgreSQL)
+
+```bash
+cp .env.example .env          # rellena POSTGRES_PASSWORD y MAIL_PASSWORD
+docker compose up --build
+docker compose exec app python seed_data.py   # opcional: datos de demo (borra los existentes)
+```
+
+Las tablas se crean automáticamente al arrancar. Dentro de Docker, `DB_TYPE=postgresql` y
+`POSTGRES_HOST=db` tienen prioridad sobre `config/settings.json`, así que la app usa PostgreSQL
+aunque ese archivo indique `sqlite`. Los reportes se guardan en `./reports`.
+
+### 🧪 Tests
+
+```bash
+pip install -r requirements-dev.txt
+python -m pytest
+```
+
+Los tests usan SQLite en memoria y una carpeta temporal para los reportes, así que no tocan tus datos
+ni envían correos. GitHub Actions los ejecuta en cada push y pull request.
 
 ---
 ## 📓 Notas de Desarrollo

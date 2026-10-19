@@ -1,19 +1,41 @@
-from app.config import settings
+import json
 
-print("--- TEST DE CONFIGURACIÓN ---")
-print(f"Nombre de la app:   {settings.app_name}")
-print(f"Empresa:            {settings.company_name}")
-print(f"Email destino:      {settings.contact_email}")
-print(f"Tipo de DB:         {settings.db_type}")
+from app.config import load_settings
 
-print("\n--- VERIFICACIÓN DE SECRETOS (.env) ---")
-if settings.POSTGRES_PASSWORD:
-    print("Constraseña de Postgres cargada (oculta por seguridad)")
-else:
-    print("No hay contraseña de Postgres (normal si usamos SQLite)")
 
-print("\n--- RESULTADO ---")
-if settings.db_type == "sqlite":
-    print("Sistema configurado para: DESARROLLO (SQLite)")
-else:
-    print("Sistema configurado para PRODUCCIÓN (Postgres)")
+def _write_settings_json(directory, data):
+    (directory / "config").mkdir()
+    (directory / "config" / "settings.json").write_text(json.dumps(data))
+
+
+def test_settings_json_overrides_defaults(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.delenv("DB_TYPE", raising=False)
+    _write_settings_json(tmp_path, {"app_name": "Mi App", "db_type": "sqlite"})
+
+    settings = load_settings()
+
+    assert settings.app_name == "Mi App"
+    assert settings.db_type == "sqlite"
+
+
+def test_environment_variable_wins_over_settings_json(tmp_path, monkeypatch):
+    """Docker fuerza DB_TYPE=postgresql aunque settings.json diga sqlite."""
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setenv("DB_TYPE", "postgresql")
+    _write_settings_json(tmp_path, {"db_type": "sqlite", "app_name": "Mi App"})
+
+    settings = load_settings()
+
+    assert settings.db_type == "postgresql"
+    # El resto de claves del JSON siguen aplicándose
+    assert settings.app_name == "Mi App"
+
+
+def test_missing_settings_json_uses_defaults(tmp_path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.delenv("DB_TYPE", raising=False)
+
+    settings = load_settings()
+
+    assert settings.db_type == "sqlite"

@@ -9,7 +9,8 @@ from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from app.database import SessionLocal
+from app.database import SessionLocal, engine, Base
+from app import models  # noqa: F401  (registra las tablas en Base.metadata)
 from app.services.report_service import ReportService, REPORT_MODELS, get_columns_for_model
 from app.services.email_service import EmailService
 from app.services.scheduler_service import start_scheduler
@@ -24,6 +25,10 @@ TEMPLATES_DIR = BASE_DIR / "app" / "templates"
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Maneja el arranque y cierre del robot (Scheduler)"""
+    # Crea las tablas si no existen (no borra datos). Imprescindible en un
+    # entorno nuevo (p. ej. un contenedor con PostgreSQL vacío).
+    (BASE_DIR / "data").mkdir(exist_ok=True)
+    Base.metadata.create_all(bind=engine)
     scheduler = start_scheduler()
     yield
     scheduler.shutdown()
