@@ -13,3 +13,9 @@ reports/*.pdf
 
 # Configuraciones locales de IDE
 .vscode/
+# Entornos y caches adicionales
+.venv/
+.pytest_cache/
+.idea/
+.DS_Store
+*.log
